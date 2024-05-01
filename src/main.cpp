@@ -5,7 +5,7 @@ extern "C" {
 }
 
 AVFormatContext *AV_read(Files files) {
-  AVFormatContext *formatContext;
+  AVFormatContext *formatContext = NULL;
   int read_input =
       avformat_open_input(&formatContext, files.inputFile, nullptr, nullptr);
 
@@ -22,12 +22,13 @@ int main(int argc, char *argv[]) {
   try {
     if (argc < 3) {
       throw std::invalid_argument(
-          "ERROR: No input files given. \nWhen using proselytize the correct "
+          "ERROR: Incorrect number of files. \nWhen using proselytize the "
+          "correct "
           "syntax is \"proselytize [input file] [outputFile]\"");
     }
 
     files.inputFile = argv[1];
-    files.outputFile = argv[argc - 1];
+    files.outputFile = argv[2];
 
     bool fileOK = validate_file(files);
     if (!fileOK) {
@@ -38,6 +39,8 @@ int main(int argc, char *argv[]) {
     std::cerr << exception.what() << std::endl;
     return -1;
   }
+
+  AVFormatContext *formatContext = AV_read(files);
 
   return 0;
 }
