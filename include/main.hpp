@@ -1,4 +1,7 @@
+#include "AV_Extraction.hpp"
 #include "file_validation.hpp"
+#include "files.hpp"
+#include <cstdlib>
 #include <exception>
 #include <iostream>
 #include <queue>

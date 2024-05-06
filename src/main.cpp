@@ -1,46 +1,22 @@
 #include "main.hpp"
+#include <libavcodec/packet.h>
+#include <ostream>
 
 extern "C" {
 #include <libavformat/avformat.h>
 }
 
-AVFormatContext *AV_read(Files files) {
-  AVFormatContext *formatContext = NULL;
-  int read_input =
-      avformat_open_input(&formatContext, files.inputFile, nullptr, nullptr);
-
-  if (read_input != 0) {
-    std::cerr << "Error opening file: " << files.inputFile << std::endl;
-  }
-
-  return formatContext;
-}
-
 int main(int argc, char *argv[]) {
-  Files files;
+  Files files = extract_files(argc, argv);
 
-  try {
-    if (argc < 3) {
-      throw std::invalid_argument(
-          "ERROR: Incorrect number of files. \nWhen using proselytize the "
-          "correct "
-          "syntax is \"proselytize [input file] [outputFile]\"");
-    }
+  AV_Extraction extract(files);
 
-    files.inputFile = argv[1];
-    files.outputFile = argv[2];
+  std::queue<AVPacket *> packetQueue = extract.extract();
 
-    bool fileOK = validate_file(files);
-    if (!fileOK) {
-      //     std::queue<std::string> missingFiles
-      throw std::invalid_argument("ERROR: Can't locate one or more files");
-    }
-  } catch (std::invalid_argument &exception) {
-    std::cerr << exception.what() << std::endl;
-    return -1;
+  while (!packetQueue.empty()) {
+    std::cout << packetQueue.front()->duration << std::endl;
+    packetQueue.pop();
   }
-
-  AVFormatContext *formatContext = AV_read(files);
 
   return 0;
 }

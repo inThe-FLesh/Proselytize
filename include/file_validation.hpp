@@ -1,10 +1,11 @@
+#include "files.hpp"
+#include <iostream>
 #include <queue>
+#include <stdexcept>
 #include <string>
 #include <sys/stat.h>
 
-struct Files {
-  const char *inputFile, *outputFile;
-};
+Files extract_files(int argc, char *argv[]);
 
 bool validate_file(Files files);
 
