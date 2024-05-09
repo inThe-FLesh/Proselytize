@@ -1,3 +1,4 @@
+#include "AV_Streams.hpp"
 #include "Error_Checking.hpp"
 #include "Files.hpp"
 #include <cstdlib>
@@ -14,7 +15,7 @@ private:
   int res;
   Files files;
   unsigned nbStreams;
-  std::vector<AVStream *> streams;
+  StreamsList streamsList;
   AVFormatContext *formatContext;
 
   AVFormatContext *AV_read();
@@ -25,7 +26,7 @@ private:
 
   void set_nbStreams();
 
-  void set_streams();
+  void set_streamsList();
 
 public:
   AV_Extraction(Files files);

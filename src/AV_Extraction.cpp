@@ -25,11 +25,10 @@ void AV_Extraction::stream_info() {
 
 void AV_Extraction::set_nbStreams() { nbStreams = formatContext->nb_streams; }
 
-void AV_Extraction::set_streams() {
-  set_nbStreams();
-  for (int i = 0; i < nbStreams; i++) {
-    streams.emplace_back(formatContext->streams[i]);
-  }
+void AV_Extraction::set_streamsList() {
+  Streams streams(formatContext, nbStreams);
+  streams.parse_streams();
+  streamsList = streams.get_stream_list();
 }
 
 // PUBLIC
@@ -37,7 +36,8 @@ AVFormatContext *AV_Extraction::get_format_context() { return formatContext; }
 
 void AV_Extraction::extractAV() {
   formatContext = AV_read();
-  dump_format();
+  // dump_format();
   stream_info();
-  set_streams();
+  set_nbStreams();
+  set_streamsList();
 }
