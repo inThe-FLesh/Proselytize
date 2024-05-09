@@ -1,9 +1,6 @@
 #include "AV_Extraction.hpp"
-#include "file_validation.hpp"
-#include "files.hpp"
-#include <cstdlib>
-#include <exception>
-#include <iostream>
+#include "Error_Checking.hpp"
+#include "File_Validation.hpp"
+#include <libavcodec/packet.h>
 #include <queue>
-#include <stdexcept>
 #include <sys/stat.h>

@@ -1,6 +1,6 @@
-#include "file_validation.hpp"
+#include "File_Validation.hpp"
 
-Files extract_files(int argc, char *argv[]) {
+Files File_Validation::extract_files(int argc, char *argv[]) {
   Files files;
   try {
     if (argc < 3) {
@@ -26,13 +26,13 @@ Files extract_files(int argc, char *argv[]) {
   return files;
 }
 
-bool validate_file(Files files) {
+bool File_Validation::validate_file(Files files) {
   struct stat buffer;
   bool inputFileOK = stat(files.inputFile, &buffer) == 0;
   return inputFileOK;
 }
 
-std::string extract_extension(char *file) {
+std::string File_Validation::extract_extension(char *file) {
   std::string filename(file);
   return filename.substr(filename.find_last_of('.') + 1);
 }

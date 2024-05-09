@@ -1,39 +1,43 @@
 #include "AV_Extraction.hpp"
-#include <libavcodec/packet.h>
 #include <libavformat/avformat.h>
-#include <queue>
 
+// PRIVATE
 AV_Extraction::AV_Extraction(Files files) { this->files = files; }
 
-std::queue<AVPacket *> AV_Extraction::extract() {
-
-  AVFormatContext *formatContext = AV_read();
-
-  std::queue<AVPacket *> packetQueue;
-
-  int done = 0;
-
-  while (done == 0) {
-    AVPacket *packet = new AVPacket();
-    done = av_read_frame(formatContext, packet);
-
-    if (done < 0)
-      break;
-
-    packetQueue.push(packet);
-  }
-
-  return packetQueue;
-}
+AV_Extraction::~AV_Extraction() { avformat_free_context(formatContext); }
 
 AVFormatContext *AV_Extraction::AV_read() {
   AVFormatContext *formatContext = NULL;
-  int read_input =
-      avformat_open_input(&formatContext, files.inputFile, nullptr, nullptr);
-
-  if (read_input != 0) {
-    std::cerr << "Error opening file: " << files.inputFile << std::endl;
-  }
+  res = avformat_open_input(&formatContext, files.inputFile, nullptr, nullptr);
+  ERROR_CHECK_RES(res, "Opening input file");
 
   return formatContext;
+}
+
+void AV_Extraction::dump_format() {
+  av_dump_format(formatContext, 0, files.inputFile, 0);
+}
+
+void AV_Extraction::stream_info() {
+  res = avformat_find_stream_info(formatContext, nullptr);
+  ERROR_CHECK_RES(res, "Finding stream info");
+}
+
+void AV_Extraction::set_nbStreams() { nbStreams = formatContext->nb_streams; }
+
+void AV_Extraction::set_streams() {
+  set_nbStreams();
+  for (int i = 0; i < nbStreams; i++) {
+    streams.emplace_back(formatContext->streams[i]);
+  }
+}
+
+// PUBLIC
+AVFormatContext *AV_Extraction::get_format_context() { return formatContext; }
+
+void AV_Extraction::extractAV() {
+  formatContext = AV_read();
+  dump_format();
+  stream_info();
+  set_streams();
 }

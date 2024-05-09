@@ -1,6 +1,8 @@
-#include "file_validation.hpp"
-#include "files.hpp"
-#include <iostream>
+#include "Error_Checking.hpp"
+#include "Files.hpp"
+#include <cstdlib>
+#include <libavcodec/packet.h>
+#include <vector>
 
 extern "C" {
 #include <libavformat/avformat.h>
@@ -8,13 +10,29 @@ extern "C" {
 
 class AV_Extraction {
 
+private:
+  int res;
+  Files files;
+  unsigned nbStreams;
+  std::vector<AVStream *> streams;
+  AVFormatContext *formatContext;
+
+  AVFormatContext *AV_read();
+
+  void dump_format();
+
+  void stream_info();
+
+  void set_nbStreams();
+
+  void set_streams();
+
 public:
   AV_Extraction(Files files);
 
-  std::queue<AVPacket *> extract();
+  ~AV_Extraction();
 
-private:
-  Files files;
+  AVFormatContext *get_format_context();
 
-  AVFormatContext *AV_read();
+  void extractAV();
 };
