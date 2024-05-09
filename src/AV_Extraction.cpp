@@ -21,11 +21,12 @@
 #include "AV_Extraction.hpp"
 #include <libavformat/avformat.h>
 
-// PRIVATE
+// Constructor and Destructor
 AV_Extraction::AV_Extraction(Files files) { this->files = files; }
 
 AV_Extraction::~AV_Extraction() { avformat_free_context(formatContext); }
 
+// PRIVATE
 AVFormatContext *AV_Extraction::AV_read() {
   AVFormatContext *formatContext = NULL;
   res = avformat_open_input(&formatContext, files.inputFile, nullptr, nullptr);
@@ -46,7 +47,7 @@ void AV_Extraction::stream_info() {
 void AV_Extraction::set_nbStreams() { nbStreams = formatContext->nb_streams; }
 
 void AV_Extraction::set_streamsList() {
-  Streams streams(formatContext, nbStreams);
+  AV_Streams streams(formatContext, nbStreams);
   streams.parse_streams();
   streamsList = streams.get_stream_list();
 }

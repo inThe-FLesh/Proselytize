@@ -32,5 +32,11 @@ int main(int argc, char *argv[]) {
   AV_Extraction extract(files);
   extract.extractAV();
 
+  AVFormatContext *formatContext = extract.get_format_context();
+
+  Packets packets(formatContext);
+
+  PacketsList packetsList = packets.process_packet_queue();
+
   return 0;
 }

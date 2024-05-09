@@ -26,31 +26,33 @@
 // These setters are here to assign the streams to the stream list depending on
 // the type of stream that they are Each corresponds to a type that an AV stream
 // can have.
-void Streams::set_unknown(AVStream *stream) { list.unknownStream = stream; }
+void AV_Streams::set_unknown(AVStream *stream) { list.unknownStream = stream; }
 
-void Streams::set_video(AVStream *stream) { list.videoStream = stream; }
+void AV_Streams::set_video(AVStream *stream) { list.videoStream = stream; }
 
-void Streams::set_audio(AVStream *stream) { list.audioStream = stream; }
+void AV_Streams::set_audio(AVStream *stream) { list.audioStream = stream; }
 
-void Streams::set_data(AVStream *stream) { list.dataStream = stream; }
+void AV_Streams::set_data(AVStream *stream) { list.dataStream = stream; }
 
-void Streams::set_subtitle(AVStream *stream) { list.subtitleStream = stream; }
+void AV_Streams::set_subtitle(AVStream *stream) {
+  list.subtitleStream = stream;
+}
 
-void Streams::set_attachment(AVStream *stream) {
+void AV_Streams::set_attachment(AVStream *stream) {
   list.attachmentStream = stream;
 }
 
-void Streams::set_NB(AVStream *stream) { list.NBStream = stream; }
+void AV_Streams::set_NB(AVStream *stream) { list.NBStream = stream; }
 
-StreamsList Streams::get_stream_list() { return list; }
+StreamsList AV_Streams::get_stream_list() { return list; }
 
 // PUBLIC
-Streams::Streams(AVFormatContext *formatContext, unsigned nbStreams) {
+AV_Streams::AV_Streams(AVFormatContext *formatContext, unsigned nbStreams) {
   this->formatContext = formatContext;
   this->nbStreams = nbStreams;
 }
 
-void Streams::parse_streams() {
+void AV_Streams::parse_streams() {
   std::queue<AVStream> streamQueue;
   for (unsigned i = 0; i < nbStreams; i++) {
     AVStream *stream = formatContext->streams[i];

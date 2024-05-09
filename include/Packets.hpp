@@ -17,17 +17,35 @@
  * along with Proselytize. If not, see <http://www.gnu.org/licenses/>.
  *
  *****************************************************************************/
+#include "AV_Streams.hpp"
+#include <queue>
+#include <thread>
 
 extern "C" {
 #include <libavcodec/packet.h>
 #include <libavformat/avformat.h>
 }
 
-struct packetsList {
-  AVPacket **videoPackets, **audioPackets, **subtitlePackets;
+struct PacketsList {
+  std::queue<AVPacket *> videoPackets, audioPackets, subtitlePackets;
 };
 
 class Packets {
 private:
-  packetsList packets;
+  PacketsList packets;
+  AVFormatContext *formatContext;
+  std::queue<AVPacket *> packetQueue;
+
+  void set_video_packets(bool *OK, AVPacket *pkt);
+
+  void set_audio_packets(bool *OK, AVPacket *pkt);
+
+  void set_subtitle_packets(bool *OK, AVPacket *pkt);
+
+  void set_packet_queue();
+
+public:
+  Packets(AVFormatContext *formatContext);
+
+  PacketsList process_packet_queue();
 };

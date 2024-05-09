@@ -25,12 +25,15 @@ extern "C" {
 #include <libavformat/avformat.h>
 }
 
+#ifndef AV_STREAMS
+#define AV_STREAMS
+
 struct StreamsList {
   AVStream *unknownStream, *videoStream, *audioStream, *dataStream,
       *subtitleStream, *attachmentStream, *NBStream;
 };
 
-class Streams {
+class AV_Streams {
 
 private:
   unsigned nbStreams;
@@ -54,7 +57,9 @@ private:
 public:
   StreamsList get_stream_list();
 
-  Streams(AVFormatContext *formatContext, unsigned nbStreams);
+  AV_Streams(AVFormatContext *formatContext, unsigned nbStreams);
 
   void parse_streams();
 };
+
+#endif // AV_STREAMS

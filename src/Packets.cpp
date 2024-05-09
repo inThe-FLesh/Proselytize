@@ -17,3 +17,15 @@
  * along with Proselytize. If not, see <http://www.gnu.org/licenses/>.
  *
  *****************************************************************************/
+
+#include "Packets.hpp"
+#include <libavcodec/packet.h>
+
+// Constructor
+Packets::Packets(AVFormatContext *formatContext) {
+  this->formatContext = formatContext;
+}
+
+// PRIVATE
+
+// PUBLIC
