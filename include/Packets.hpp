@@ -27,25 +27,20 @@ extern "C" {
 }
 
 struct PacketsList {
-  std::queue<AVPacket *> videoPackets, audioPackets, subtitlePackets;
+  std::queue<AVPacket> videoPackets, audioPackets, subtitlePackets;
 };
 
 class Packets {
 private:
   PacketsList packets;
   AVFormatContext *formatContext;
-  std::queue<AVPacket *> packetQueue;
-
-  void set_video_packets(bool *OK, AVPacket *pkt);
-
-  void set_audio_packets(bool *OK, AVPacket *pkt);
-
-  void set_subtitle_packets(bool *OK, AVPacket *pkt);
-
-  void set_packet_queue();
+  std::queue<AVPacket> trash;
 
 public:
   Packets(AVFormatContext *formatContext);
 
-  PacketsList process_packet_queue();
+  PacketsList get_packets();
+
+  // this could be sped up with parallelism
+  void Extract_Packets();
 };

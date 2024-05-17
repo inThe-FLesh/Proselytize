@@ -57,7 +57,7 @@ AVFormatContext *AV_Extraction::get_format_context() { return formatContext; }
 
 void AV_Extraction::extractAV() {
   formatContext = AV_read();
-  // dump_format();
+  dump_format();
   stream_info();
   set_nbStreams();
   set_streamsList();

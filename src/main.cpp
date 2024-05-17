@@ -36,7 +36,13 @@ int main(int argc, char *argv[]) {
 
   Packets packets(formatContext);
 
-  PacketsList packetsList = packets.process_packet_queue();
+  packets.Extract_Packets();
+
+  PacketsList packetsList = packets.get_packets();
+
+  AVPacket pkt = packetsList.videoPackets.front();
+
+  std::cout << pkt.size << std::endl;
 
   return 0;
 }

@@ -19,13 +19,37 @@
  *****************************************************************************/
 
 #include "Packets.hpp"
-#include <libavcodec/packet.h>
+#include <memory>
 
 // Constructor
 Packets::Packets(AVFormatContext *formatContext) {
   this->formatContext = formatContext;
 }
 
-// PRIVATE
-
 // PUBLIC
+
+PacketsList Packets::get_packets() { return packets; }
+
+void Packets::Extract_Packets() {
+  int OKSignal = 0;
+  AVPacket *pkt = av_packet_alloc();
+
+  OKSignal = av_read_frame(formatContext, pkt);
+
+  std::cout << "OKSignal: " << OKSignal << std::endl;
+
+  while (OKSignal == 0) {
+    OKSignal = av_read_frame(formatContext, pkt);
+
+    switch (pkt->stream_index) {
+    case 0:
+      packets.videoPackets.push(*pkt);
+    case 1:
+      packets.audioPackets.push(*pkt);
+    case 3:
+      packets.subtitlePackets.push(*pkt);
+    default:
+      trash.push(*pkt);
+    }
+  }
+}
