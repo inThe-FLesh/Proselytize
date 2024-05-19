@@ -1,5 +1,11 @@
 #include "Decode.hpp"
+#include <libavcodec/avcodec.h>
 
-__global__ void decode() {}
+Decode::Decode(AVCodec *codec, AVCodecContext *codecContext) {
+  this->codec = codec;
+  this->codecContext = codecContext;
 
-void decode_pkt(AVPacket pkt) {}
+  int res = avcodec_open2(codecContext, codec, NULL);
+
+  ERROR_CHECK_RES(res, "opening avcodec");
+}

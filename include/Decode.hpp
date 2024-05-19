@@ -6,9 +6,16 @@ extern "C" {
 #include <libavutil/common.h>
 }
 
+#include "Error_Checking.hpp"
+
 #include <cstdio>
 #include <hip/hip_runtime.h>
 
-__global__ void decode();
+class Decode {
+private:
+  AVCodec *codec;
+  AVCodecContext *codecContext;
 
-void decode_pkt();
+public:
+  Decode(AVCodec *codec, AVCodecContext *codecContext);
+};

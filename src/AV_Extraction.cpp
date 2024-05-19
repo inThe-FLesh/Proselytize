@@ -60,15 +60,21 @@ void AV_Extraction::set_codec_ids() {
 void AV_Extraction::set_video_codec_context() {
   decoders.videoDecoder = avcodec_find_decoder(codecs.videoCodec);
   codecContexts.videoContext = avcodec_alloc_context3(decoders.videoDecoder);
-  avcodec_parameters_to_context(codecContexts.videoContext,
-                                streamsList.videoStream_params);
+  int res = avcodec_parameters_to_context(codecContexts.videoContext,
+                                          streamsList.videoStream_params);
+
+  ERROR_CHECK_RES(res,
+                  "avcodec_parameters_to_context in set_video_codec_context");
 }
 
 void AV_Extraction::set_audio_codec_context() {
   decoders.audioDecoder = avcodec_find_decoder(codecs.audioCodec);
   codecContexts.audioContext = avcodec_alloc_context3(decoders.audioDecoder);
-  avcodec_parameters_to_context(codecContexts.audioContext,
-                                streamsList.audioStream_params);
+  int res = avcodec_parameters_to_context(codecContexts.audioContext,
+                                          streamsList.audioStream_params);
+
+  ERROR_CHECK_RES(res,
+                  "avcodec_parameters_to_context in set_audio_codec_context");
 }
 
 // PUBLIC
