@@ -22,20 +22,42 @@
 #include "Error_Checking.hpp"
 #include "Files.hpp"
 #include <cstdlib>
-#include <libavcodec/packet.h>
-#include <vector>
 
 extern "C" {
+#include <libavcodec/avcodec.h>
+#include <libavcodec/codec.h>
+#include <libavcodec/packet.h>
 #include <libavformat/avformat.h>
 }
+
+struct CodecIDs {
+  AVCodecID videoCodec, audioCodec;
+};
+
+struct CodecContexts {
+  AVCodecContext *videoContext, *audioContext;
+};
+
+struct Decoders {
+  const AVCodec *videoDecoder, *audioDecoder;
+};
+
+/*
+ * This class is used to extract all of the required data from the input video.
+ * It places the info into fields and structures for easy access.
+ */
 
 class AV_Extraction {
 
 private:
   int res;
   Files files;
+  CodecIDs codecs;
+  CodecContexts codecContexts;
+  Decoders decoders;
   unsigned nbStreams;
   StreamsList streamsList;
+
   AVFormatContext *formatContext;
 
   AVFormatContext *AV_read();
@@ -48,12 +70,22 @@ private:
 
   void set_streamsList();
 
+  void set_codec_ids();
+
+  void set_video_codec_context();
+
+  void set_audio_codec_context();
+
 public:
   AV_Extraction(Files files);
 
   ~AV_Extraction();
 
   AVFormatContext *get_format_context();
+
+  CodecContexts get_codec_contexts();
+
+  Decoders get_decoders();
 
   void extractAV();
 };

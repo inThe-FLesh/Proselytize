@@ -19,6 +19,7 @@
  *****************************************************************************/
 
 #include <iostream>
+#include <libavcodec/codec_par.h>
 #include <queue>
 
 extern "C" {
@@ -31,11 +32,16 @@ extern "C" {
 struct StreamsList {
   AVStream *unknownStream, *videoStream, *audioStream, *dataStream,
       *subtitleStream, *attachmentStream, *NBStream;
+
+  AVCodecParameters *unknownStream_params, *videoStream_params,
+      *audioStream_params, *dataStream_params, *subtitleStream_params,
+      *attachmentStream_params, *NBStream_params;
 };
 
 class AV_Streams {
 
 private:
+  bool areStreamsSet = false;
   unsigned nbStreams;
   StreamsList list;
   AVFormatContext *formatContext;
@@ -54,12 +60,28 @@ private:
 
   void set_NB(AVStream *stream);
 
+  void set_unknown_params(AVCodecParameters *codec_params);
+
+  void set_video_params(AVCodecParameters *codec_params);
+
+  void set_audio_params(AVCodecParameters *codec_params);
+
+  void set_data_params(AVCodecParameters *codec_params);
+
+  void set_subtitle_params(AVCodecParameters *codec_params);
+
+  void set_attachment_params(AVCodecParameters *codec_params);
+
+  void set_NB_params(AVCodecParameters *codec_params);
+
+  void set_codec_params(int streamID);
+
 public:
   StreamsList get_stream_list();
 
-  AV_Streams(AVFormatContext *formatContext, unsigned nbStreams);
+  void set_streams();
 
-  void parse_streams();
+  AV_Streams(AVFormatContext *formatContext, unsigned nbStreams);
 };
 
 #endif // AV_STREAMS

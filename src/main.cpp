@@ -40,9 +40,10 @@ int main(int argc, char *argv[]) {
 
   PacketsList packetsList = packets.get_packets();
 
-  AVPacket pkt = packetsList.videoPackets.front();
+  CodecContexts codecContext = extract.get_codec_contexts();
 
-  std::cout << pkt.size << std::endl;
+  std::cout << "video codec ID: " << codecContext.videoContext->codec_id
+            << std::endl;
 
   return 0;
 }

@@ -19,7 +19,7 @@
  *****************************************************************************/
 
 #include "AV_Extraction.hpp"
-#include <libavformat/avformat.h>
+#include <libavcodec/avcodec.h>
 
 // Constructor and Destructor
 AV_Extraction::AV_Extraction(Files files) { this->files = files; }
@@ -48,12 +48,35 @@ void AV_Extraction::set_nbStreams() { nbStreams = formatContext->nb_streams; }
 
 void AV_Extraction::set_streamsList() {
   AV_Streams streams(formatContext, nbStreams);
-  streams.parse_streams();
+  streams.set_streams();
   streamsList = streams.get_stream_list();
+}
+
+void AV_Extraction::set_codec_ids() {
+  codecs.videoCodec = streamsList.videoStream_params->codec_id;
+  codecs.audioCodec = streamsList.audioStream_params->codec_id;
+}
+
+void AV_Extraction::set_video_codec_context() {
+  decoders.videoDecoder = avcodec_find_decoder(codecs.videoCodec);
+  codecContexts.videoContext = avcodec_alloc_context3(decoders.videoDecoder);
+  avcodec_parameters_to_context(codecContexts.videoContext,
+                                streamsList.videoStream_params);
+}
+
+void AV_Extraction::set_audio_codec_context() {
+  decoders.audioDecoder = avcodec_find_decoder(codecs.audioCodec);
+  codecContexts.audioContext = avcodec_alloc_context3(decoders.audioDecoder);
+  avcodec_parameters_to_context(codecContexts.audioContext,
+                                streamsList.audioStream_params);
 }
 
 // PUBLIC
 AVFormatContext *AV_Extraction::get_format_context() { return formatContext; }
+
+CodecContexts AV_Extraction::get_codec_contexts() { return codecContexts; }
+
+Decoders AV_Extraction::get_decoders() { return decoders; }
 
 void AV_Extraction::extractAV() {
   formatContext = AV_read();
@@ -61,4 +84,6 @@ void AV_Extraction::extractAV() {
   stream_info();
   set_nbStreams();
   set_streamsList();
+  set_video_codec_context();
+  set_audio_codec_context();
 }

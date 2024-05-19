@@ -1,2 +1,5 @@
-#include <cstdio>
-#include <hip/hip_runtime.h>
+#include "Decode.hpp"
+
+__global__ void decode() {}
+
+void decode_pkt(AVPacket pkt) {}

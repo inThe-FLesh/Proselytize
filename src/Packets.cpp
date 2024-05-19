@@ -19,6 +19,7 @@
  *****************************************************************************/
 
 #include "Packets.hpp"
+#include <libavcodec/packet.h>
 #include <memory>
 
 // Constructor
@@ -32,7 +33,7 @@ PacketsList Packets::get_packets() { return packets; }
 
 void Packets::Extract_Packets() {
   int OKSignal = 0;
-  AVPacket *pkt = av_packet_alloc();
+  AVPacket *pkt;
 
   OKSignal = av_read_frame(formatContext, pkt);
 
