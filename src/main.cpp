@@ -19,6 +19,8 @@
  *****************************************************************************/
 
 #include "main.hpp"
+#include <libavcodec/codec.h>
+#include <ostream>
 
 int main(int argc, char *argv[]) {
   Files files;
@@ -45,5 +47,31 @@ int main(int argc, char *argv[]) {
   std::cout << "video codec ID: " << codecContext.videoContext->codec_id
             << std::endl;
 
+  std::cout << "Sample Rate: " << codecContext.audioContext->sample_rate
+            << "\nChannel Layout: "
+            << codecContext.audioContext->ch_layout.order
+            << "\nSample Format: " << codecContext.audioContext->sample_fmt
+            << std::endl;
+
+  /*  const AVCodec *videoCodec =
+        avcodec_find_decoder(codecContext.videoContext->codec_id);
+
+    const AVCodec *audioCodec =
+        avcodec_find_decoder(codecContext.audioContext->codec_id);
+
+    CodecList codecs;
+
+    codecs.videoCodec = videoCodec;
+    codecs.audioCodec = audioCodec;
+
+    CodecContextList contexts;
+
+    contexts.videoCodecContext = codecContext.videoContext;
+    contexts.audioCodecContext = codecContext.audioContext;
+
+    Decode decode(codecs, contexts, packetsList);
+
+    Frames frames = decode.get_frames();
+  */
   return 0;
 }

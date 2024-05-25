@@ -26,6 +26,8 @@ extern "C" {
 #include <libavformat/avformat.h>
 }
 
+#ifndef PACKETS
+#define PACKETS
 struct PacketsList {
   std::queue<AVPacket> videoPackets, audioPackets, subtitlePackets;
 };
@@ -44,3 +46,4 @@ public:
   // this could be sped up with parallelism
   void Extract_Packets();
 };
+#endif
