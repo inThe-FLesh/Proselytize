@@ -23,6 +23,12 @@
 #include <libavformat/avformat.h>
 #include <libavutil/avutil.h>
 
+// Constructor
+AV_Streams::AV_Streams(AVFormatContext *formatContext, unsigned nbStreams) {
+  this->formatContext = formatContext;
+  this->nbStreams = nbStreams;
+}
+
 // PRIVATE
 
 // These setters are here to assign the streams to the stream list depending on
@@ -79,18 +85,25 @@ void AV_Streams::set_codec_params(int streamID) {
     switch (streamID) {
     case -1:
       set_unknown_params(list.unknownStream->codecpar);
+      break;
     case 0:
       set_video_params(list.videoStream->codecpar);
+      break;
     case 1:
       set_audio_params(list.audioStream->codecpar);
+      break;
     case 2:
       set_data_params(list.dataStream->codecpar);
+      break;
     case 3:
       set_subtitle_params(list.subtitleStream->codecpar);
+      break;
     case 4:
       set_attachment_params(list.attachmentStream->codecpar);
+      break;
     case 5:
       set_NB_params(list.NBStream->codecpar);
+      break;
     }
   } else {
     std::cerr
@@ -100,11 +113,6 @@ void AV_Streams::set_codec_params(int streamID) {
 }
 
 // PUBLIC
-AV_Streams::AV_Streams(AVFormatContext *formatContext, unsigned nbStreams) {
-  this->formatContext = formatContext;
-  this->nbStreams = nbStreams;
-}
-
 void AV_Streams::set_streams() {
   std::queue<AVStream> streamQueue;
   areStreamsSet = true;
@@ -117,24 +125,31 @@ void AV_Streams::set_streams() {
     case -1:
       set_unknown(stream);
       set_codec_params(mediaType);
+      break;
     case 0:
       set_video(stream);
       set_codec_params(mediaType);
+      break;
     case 1:
       set_audio(stream);
       set_codec_params(mediaType);
+      break;
     case 2:
       set_data(stream);
       set_codec_params(mediaType);
+      break;
     case 3:
       set_subtitle(stream);
       set_codec_params(mediaType);
+      break;
     case 4:
       set_attachment(stream);
       set_codec_params(mediaType);
+      break;
     case 5:
       set_NB(stream);
       set_codec_params(mediaType);
+      break;
     }
   }
 }

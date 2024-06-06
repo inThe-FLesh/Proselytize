@@ -28,4 +28,6 @@
 // The name stands for error check result
 void ERROR_CHECK_RES(int res, std::string location);
 
+void ERROR_CHECK_BOOL(bool OKSignal, std::string location);
+
 #endif // !ERROR_CHECKING_H

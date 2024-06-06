@@ -29,3 +29,12 @@ void ERROR_CHECK_RES(int res, std::string location) {
     exit(EXIT_FAILURE);
   }
 }
+
+void ERROR_CHECK_BOOL(bool OKSignal, std::string location) {
+  if (!OKSignal) {
+    // making error text red with ANSI code
+    std::cerr << "\033[1;31m ERROR FAILED AT: " << location << "\033[0m"
+              << std::endl;
+    exit(EXIT_FAILURE);
+  }
+}

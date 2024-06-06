@@ -24,7 +24,10 @@
 // Constructor and Destructor
 AV_Extraction::AV_Extraction(Files files) { this->files = files; }
 
-AV_Extraction::~AV_Extraction() { avformat_free_context(formatContext); }
+AV_Extraction::~AV_Extraction() {
+  // void function error check res not needed
+  avformat_free_context(formatContext);
+}
 
 // PRIVATE
 AVFormatContext *AV_Extraction::AV_read() {
@@ -36,6 +39,7 @@ AVFormatContext *AV_Extraction::AV_read() {
 }
 
 void AV_Extraction::dump_format() {
+  // void function error check res not needed
   av_dump_format(formatContext, 0, files.inputFile, 0);
 }
 
@@ -59,7 +63,13 @@ void AV_Extraction::set_codec_ids() {
 
 void AV_Extraction::set_video_codec_context() {
   decoders.videoDecoder = avcodec_find_decoder(codecs.videoCodec);
+  std::cout << "video codec ID: " << codecs.videoCodec << std::endl;
+  ERROR_CHECK_BOOL(decoders.videoDecoder != NULL, "finding video decoder");
+
   codecContexts.videoContext = avcodec_alloc_context3(decoders.videoDecoder);
+  ERROR_CHECK_BOOL(codecContexts.videoContext != NULL,
+                   "allocating video context");
+
   int res = avcodec_parameters_to_context(codecContexts.videoContext,
                                           streamsList.videoStream_params);
 
@@ -69,7 +79,11 @@ void AV_Extraction::set_video_codec_context() {
 
 void AV_Extraction::set_audio_codec_context() {
   decoders.audioDecoder = avcodec_find_decoder(codecs.audioCodec);
+  ERROR_CHECK_BOOL(decoders.audioDecoder, "finding audio decoder");
+
   codecContexts.audioContext = avcodec_alloc_context3(decoders.audioDecoder);
+  ERROR_CHECK_BOOL(codecContexts.audioContext, "allocating audio context");
+
   int res = avcodec_parameters_to_context(codecContexts.audioContext,
                                           streamsList.audioStream_params);
 

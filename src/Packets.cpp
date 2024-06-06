@@ -33,7 +33,7 @@ PacketsList Packets::get_packets() { return packets; }
 
 void Packets::Extract_Packets() {
   int OKSignal = 0;
-  AVPacket *pkt;
+  AVPacket *pkt = NULL;
 
   OKSignal = av_read_frame(formatContext, pkt);
 
