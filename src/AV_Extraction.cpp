@@ -104,6 +104,7 @@ void AV_Extraction::extractAV() {
   stream_info();
   set_nbStreams();
   set_streamsList();
+  set_codec_ids();
   set_video_codec_context();
   set_audio_codec_context();
 }

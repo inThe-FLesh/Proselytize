@@ -33,7 +33,7 @@ PacketsList Packets::get_packets() { return packets; }
 
 void Packets::Extract_Packets() {
   int OKSignal = 0;
-  AVPacket *pkt = NULL;
+  AVPacket *pkt;
 
   OKSignal = av_read_frame(formatContext, pkt);
 
@@ -45,10 +45,13 @@ void Packets::Extract_Packets() {
     switch (pkt->stream_index) {
     case 0:
       packets.videoPackets.push(*pkt);
+      break;
     case 1:
       packets.audioPackets.push(*pkt);
+      break;
     case 3:
       packets.subtitlePackets.push(*pkt);
+      break;
     default:
       trash.push(*pkt);
     }
