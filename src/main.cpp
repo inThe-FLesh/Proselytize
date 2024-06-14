@@ -67,5 +67,9 @@ int main(int argc, char *argv[]) {
 
   Frames frames = decode.get_frames();
 
+  const AVCodec *encoder = avcodec_find_encoder_by_name("ff_libx265_encoder");
+
+  Encode encode(encoder, contexts.videoCodecContext);
+
   return 0;
 }

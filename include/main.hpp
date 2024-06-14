@@ -20,9 +20,11 @@
 
 #include "AV_Extraction.hpp"
 #include "Decode.hpp"
+#include "Encode.hpp"
 #include "Error_Checking.hpp"
 #include "File_Validation.hpp"
 #include "Packets.hpp"
+#include <libavcodec/codec.h>
 #include <sys/stat.h>
 
 extern "C" {
